@@ -15,7 +15,7 @@ pub enum NotSupportedIpError {
     Ipv6IsNotSupported,
 }
 
-pub fn get_supported_ip() -> Result<Ipv4Addr, NotSupportedIpError> {
+pub fn get_machine_ipv4() -> Result<Ipv4Addr, NotSupportedIpError> {
     let ip = local_ip().map_err(|e| NotSupportedIpError::LocalIpError(e))?;
 
     match ip {
@@ -24,24 +24,28 @@ pub fn get_supported_ip() -> Result<Ipv4Addr, NotSupportedIpError> {
     }
 }
 
-pub async fn scan(own_ip: Ipv4Addr) -> Vec<Ipv4Addr> {
+pub async fn scan(own_ip: Ipv4Addr, limit: usize) -> Vec<Ipv4Addr> {
     let [a, b, c, _] = own_ip.octets();
     let port = 10000;
     let mut avaliable_listeners: Vec<Ipv4Addr> = Vec::new();
     for d in 2..=253 {
+        if avaliable_listeners.len() >= limit {
+            break;
+        }
         let ip = Ipv4Addr::new(a, b, c, d);
         let host = SocketHost::Ipv4(ip);
         let socket_adress = SocketAddress { host, port };
-
-        if srt_ready(socket_adress, 3000).await {
+        println!("Tentando endereço {0}:{1}", ip.to_string(), port);
+        if is_adress_srt_ready(socket_adress, 500).await {
             avaliable_listeners.push(ip);
+            println!("Endereço adicionado")
         }
     }
 
     avaliable_listeners
 }
 
-async fn srt_ready(socket_adress: SocketAddress, timeout_millis: u64) -> bool {
+pub async fn is_adress_srt_ready(socket_adress: SocketAddress, timeout_millis: u64) -> bool {
     let connection_attemp = SrtSocket::builder().call(socket_adress, None);
     let res = timeout(Duration::from_millis(timeout_millis), connection_attemp).await;
     matches!(res, Ok(Ok(_)))
