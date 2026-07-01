@@ -1,4 +1,5 @@
 use std::{
+    io::Error,
     net::{IpAddr, Ipv4Addr, SocketAddrV4},
     time::Duration,
 };
@@ -8,7 +9,10 @@ use srt_tokio::{
     SrtSocket,
     options::{SocketAddress, SocketHost},
 };
-use tokio::time::timeout;
+use tokio::{
+    process::{Child, Command},
+    time::timeout,
+};
 
 pub enum NotSupportedIpError {
     LocalIpError(local_ip_address::Error),
@@ -49,4 +53,8 @@ pub async fn is_adress_srt_ready(socket_adress: SocketAddress, timeout_millis: u
     let connection_attemp = SrtSocket::builder().call(socket_adress, None);
     let res = timeout(Duration::from_millis(timeout_millis), connection_attemp).await;
     matches!(res, Ok(Ok(_)))
+}
+pub fn start_mpv(ip: Ipv4Addr, port: u16) -> Result<Child, Error> {
+    let url = format!("srt://{}:{}", ip, port);
+    Command::new("mpv").arg(url).spawn()
 }

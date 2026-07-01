@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mpv_to_vmix::actions::{get_machine_ipv4, is_adress_srt_ready, scan};
+    use mpv_to_vmix::actions::{get_machine_ipv4, is_adress_srt_ready, scan, start_mpv};
     use srt_tokio::options::{SocketAddress, SocketHost};
     use std::net::Ipv4Addr;
 
@@ -31,5 +31,18 @@ mod tests {
     async fn scan_can_discovery_first_srt_caller() {
         let all = scan(OWN_IP, 1).await;
         assert_eq!(all.len(), 1);
+    }
+
+    #[tokio::test]
+    async fn start_mpv_call_mpv() {
+        let result = start_mpv(VMIX_IP, VMIX_SRT_PORT);
+        assert!(
+            result.is_ok(),
+            "Falha ao inicializar o processo do mpv. Verifique se ele está adicionado às variáveis de ambiente ou PATH"
+        );
+        if let Ok(mut child_process) = result {
+            let terminate = child_process.kill();
+            assert!(terminate.await.is_ok())
+        }
     }
 }
