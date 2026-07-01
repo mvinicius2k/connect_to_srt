@@ -1,5 +1,5 @@
 [package]
-name = "mpv-to-vmix"
+name = "connect_to_srt"
 version = "0.1.0"
 edition = "2024"
 
