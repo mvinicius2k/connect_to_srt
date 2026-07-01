@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mpv_to_vmix::actions::{get_machine_ipv4, is_adress_srt_ready, scan, start_mpv};
+    use connect_to_srt::actions::{get_machine_ipv4, is_adress_srt_ready, scan, start_mpv};
     use srt_tokio::options::{SocketAddress, SocketHost};
     use std::net::Ipv4Addr;
 

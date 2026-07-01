@@ -1,6 +1,6 @@
 use std::{
     io::Error,
-    net::{IpAddr, Ipv4Addr, SocketAddrV4},
+    net::{IpAddr, Ipv4Addr},
     time::Duration,
 };
 
