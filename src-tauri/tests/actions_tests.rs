@@ -1,13 +1,13 @@
 #[cfg(test)]
 mod tests {
     use super::*;
-    use connect_to_srt::actions::{get_machine_ipv4, is_adress_srt_ready, scan, start_mpv};
+    use srt_scanner_lib::actions::{get_machine_ipv4, is_adress_srt_ready, scan, start_mpv};
     use srt_tokio::options::{SocketAddress, SocketHost};
     use std::net::Ipv4Addr;
 
     const OWN_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 0, 13);
-    const VMIX_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 0, 12);
-    const VMIX_SRT_PORT: u16 = 10000;
+    const CALLER_IP: Ipv4Addr = Ipv4Addr::new(192, 168, 0, 12);
+    const CALLER_SRT_PORT: u16 = 10000;
 
     #[test]
     fn get_machine_ipv4_can_be_executed() {
@@ -19,10 +19,10 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn is_adress_srt_ready_can_see_vmix() {
+    async fn is_adress_srt_ready_can_see_caller() {
         let socket_adress = SocketAddress {
-            host: SocketHost::Ipv4(VMIX_IP),
-            port: VMIX_SRT_PORT,
+            host: SocketHost::Ipv4(CALLER_IP),
+            port: CALLER_SRT_PORT,
         };
         let is_ready = is_adress_srt_ready(socket_adress, 500).await;
         assert!(is_ready)
@@ -35,7 +35,7 @@ mod tests {
 
     #[tokio::test]
     async fn start_mpv_call_mpv() {
-        let result = start_mpv(VMIX_IP, VMIX_SRT_PORT);
+        let result = start_mpv(CALLER_IP, CALLER_SRT_PORT);
         assert!(
             result.is_ok(),
             "Falha ao inicializar o processo do mpv. Verifique se ele está adicionado às variáveis de ambiente ou PATH"

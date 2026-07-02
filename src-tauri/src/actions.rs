@@ -6,8 +6,8 @@ use std::{
 
 use local_ip_address::local_ip;
 use srt_tokio::{
-    SrtSocket,
     options::{SocketAddress, SocketHost},
+    SrtSocket,
 };
 use tokio::{
     process::{Child, Command},
