@@ -18,7 +18,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col w-dvw h-dvh dark:bg-indigo-950 bg-indigo-100">
+    <div className="flex flex-col w-dvw h-dvh bg-linear-150 bg-fixed from-indigo-950 to-neutral-950 bg-indigo-100">
       <header className="mt-4 mb-20 flex flex-row-reverse items-center gap-2.5 pr-4">
         <Button
           data-tooltip-id="settings"
@@ -30,7 +30,7 @@ function App() {
         </Button>
         <Tooltip place="bottom-end" identifier="settings" />
       </header>
-      <main className="">
+      <main className=" flex-1">
         <Outlet />
       </main>
     </div>
