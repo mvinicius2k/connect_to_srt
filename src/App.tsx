@@ -18,8 +18,8 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col w-dvw h-dvh bg-linear-150 bg-fixed from-indigo-950 to-neutral-950 bg-indigo-100">
-      <header className="mt-4 mb-20 flex flex-row-reverse items-center gap-2.5 pr-4">
+    <div className="flex flex-col w-dvw h-dvh bg-linear-150 bg-fixed from-indigo-950 to-neutral-950 bg-indigo-100 dark:text-neutral-100 text-neutral-900">
+      <header className="mt-4 flex flex-row-reverse items-center gap-2.5 pr-4 absolute w-full">
         <Button
           data-tooltip-id="settings"
           data-tooltip-content="Configurações"
@@ -30,7 +30,7 @@ function App() {
         </Button>
         <Tooltip place="bottom-end" identifier="settings" />
       </header>
-      <main className=" flex-1">
+      <main className="flex-1 py-12">
         <Outlet />
       </main>
     </div>

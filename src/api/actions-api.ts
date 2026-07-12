@@ -1,11 +1,8 @@
 import { defineCommands, ErrorIdentifier } from "@/api/tauri";
+import { SRTPoint } from "@/components/srt-points-viewer/shared";
 import { ActionsMock } from "@/mock/actions-mock";
 
-export type ScanSucessResponseDto = {
-  host: string;
-  port: number;
-  kind: "listener" | "rez";
-};
+export type ScanSucessResponseDto = SRTPoint[];
 export type ScanFailResponseDto = ErrorIdentifier;
 
 export type ViewSucessResponseDto = void;

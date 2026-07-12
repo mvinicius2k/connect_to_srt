@@ -11,12 +11,24 @@ export const ActionsMock = {
   async scan(): Promise<
     ResultAction<ScanSucessResponseDto, ScanFailResponseDto>
   > {
-    await sleep(3000);
-    return Result.success({
-      host: "192.168.0.13",
-      port: 10000,
-      kind: "listener",
-    });
+    await sleep(0);
+    return Result.success([
+      {
+        host: "192.168.0.13",
+        port: 10000,
+        kind: "listener",
+      },
+      {
+        host: "192.168.0.14",
+        port: 10000,
+        kind: "listener",
+      },
+      {
+        host: "192.168.0.17",
+        port: 10000,
+        kind: "rez",
+      },
+    ]);
   },
   async view(data: {
     runner: string;
