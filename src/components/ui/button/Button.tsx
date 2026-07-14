@@ -2,25 +2,25 @@ import { ButtonProps } from "@/components/ui/button/shared";
 import clsx from "clsx";
 
 function Button(
-  { variant, children, sticky, ...props }: ButtonProps = {
+  { variant, children, sticky, selected, ...props }: ButtonProps = {
     variant: "primary",
-    size: "medium",
   },
 ) {
   const classes = clsx(
-    "cursor-pointer active:scale-90 duration-100 disabled:hover:bg-current disabled:active:scale-100 disabled:opacity-50 disabled:saturate-50",
+    "not-disabled:cursor-pointer not-disabled:active:scale-90 duration-100 disabled:opacity-50 disabled:saturate-50 inline-flex items-center justify-center",
     {
       "h-10 px-4 min-w-28": !sticky,
-      "size-8 p-1": sticky,
-      "bg-indigo-700 text-neutral-100": variant === "primary",
-      "dark:bg-neutral-100 dark:text-neutral-800 bg-neutral-900 text-neutral-100":
+      "size-8 p-1 rounded-full": sticky,
+      "bg-indigo-700 text-neutral-100 aria-selected:saturate-200": variant === "primary",
+      "dark:bg-neutral-100 dark:text-neutral-800 bg-neutral-900 text-neutral-100 aria-selected:bg-indigo-400":
         variant === "secondary",
-      " rounded-3xl dark:hover:bg-indigo-800/40 dark:hover:text-indigo-300 dark:text-indigo-400 hover:bg-indigo-200/40 hover:text-indigo-800 text-indigo-700":
+      "rounded-3xl dark:not-disabled:hover:bg-indigo-800/40 not-disabled:dark:hover:text-indigo-300 dark:text-indigo-400 not-disabled:hover:bg-indigo-200/40 not-disabled:hover:text-indigo-800 text-indigo-700 aria-selected:bg-indigo-600/50 aria-selected:dark:text-white aria-selected:text-black":
         variant === "transparent",
     },
+    props.className
   );
   return (
-    <button {...props} className={classes}>
+    <button {...props} aria-selected={selected} className={classes}>
       {children}
     </button>
   );
