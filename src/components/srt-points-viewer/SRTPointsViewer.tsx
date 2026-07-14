@@ -4,10 +4,11 @@ import clsx from "clsx";
 
 
 
-function SRTPointsViewer({points, allowTextSelect, ...props}: SRTPointsViewerProps) {
+function SRTPointsViewer({points, allowTextSelect, onSelectedPoint, ...props}: SRTPointsViewerProps) {
   const [selected, setSelect] = useState<number>();
 
   function select(index: number) {
+    onSelectedPoint?.(points[index])
     setSelect(index)
   }
 

@@ -11,6 +11,6 @@ export type SRTPoint = {
 export interface SRTPointsViewerProps extends  HTMLAttributes<HTMLDivElement> {
   points: SRTPoint[],
   allowTextSelect?: boolean,
-
+  onSelectedPoint: (selected: SRTPoint) => void
 
 }
