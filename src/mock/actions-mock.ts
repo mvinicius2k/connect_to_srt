@@ -4,6 +4,7 @@ import {
   ViewFailResponseDto,
   ViewSucessResponseDto,
 } from "@/api/actions-api";
+import { SRTPoint } from "@/components/srt-points-viewer/shared";
 import { Result, ResultAction } from "@/helpers/result";
 import { sleep } from "@/helpers/utils";
 
@@ -30,9 +31,8 @@ export const ActionsMock = {
       },
     ]);
   },
-  async view(data: {
-    runner: string;
-    args?: string[];
+  async play(data: {
+    point: SRTPoint;
   }): Promise<ResultAction<ViewSucessResponseDto, ViewFailResponseDto>> {
     console.log(data);
     return Result.success(undefined);

@@ -11,7 +11,7 @@ export const ActionsAPI = defineCommands({
   scan: {
     mock: ActionsMock.scan,
   },
-  view: {
-    mock: ActionsMock.view,
+  play: {
+    mock: ActionsMock.play,
   },
 });
