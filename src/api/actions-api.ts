@@ -8,10 +8,10 @@ export type ScanFailResponseDto = ErrorIdentifier;
 export type ViewSucessResponseDto = void;
 export type ViewFailResponseDto = ErrorIdentifier;
 export const ActionsAPI = defineCommands({
-  scan: {
+  scan_command: {
     mock: ActionsMock.scan,
   },
-  play: {
+  play_command: {
     mock: ActionsMock.play,
   },
 });
