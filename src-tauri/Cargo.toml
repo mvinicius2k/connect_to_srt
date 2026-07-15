@@ -27,3 +27,5 @@ srt-tokio = "0.4.4"
 clap = { version = "4", features = ["derive"] }
 local-ip-address = "0.6.13"
 url = "2.5.8"
+strum = "0.28"
+strum_macros = "0.28"
