@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use super::*;
+
     use srt_scanner_lib::actions::{get_machine_ipv4, is_adress_srt_ready, scan, start_mpv};
     use srt_tokio::options::{SocketAddress, SocketHost};
     use std::net::Ipv4Addr;
@@ -28,9 +28,9 @@ mod tests {
         assert!(is_ready)
     }
     #[tokio::test]
-    async fn scan_can_discovery_first_srt_caller() {
-        let all = scan(OWN_IP, 1).await;
-        assert_eq!(all.len(), 1);
+    async fn scan_can_discovery_some_srt_caller() {
+        let all = scan(OWN_IP).await;
+        assert!(all.len() > 0);
     }
 
     #[tokio::test]
