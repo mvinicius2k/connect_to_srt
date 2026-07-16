@@ -15,7 +15,7 @@ function Index() {
   const toolbar = useToolbar();
 
   async function scan() {
-    const result = await ActionsAPI.invoke("scan");
+    const result = await ActionsAPI.invoke("scan_command");
     if (result.failed) {
       console.error("Falhou");
       return;

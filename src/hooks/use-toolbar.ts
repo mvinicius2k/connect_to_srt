@@ -8,10 +8,10 @@ export function useToolbarImpl() {
 
   const impl: ToolbarActions = {
     play(srtPoint) {
-      return ActionsAPI.invoke('play', {point: srtPoint})
+      return ActionsAPI.invoke('play_command', {point: srtPoint})
     },
     scanAgain() {
-      return ActionsAPI.invoke('scan')
+      return ActionsAPI.invoke('scan_command')
     },
     toggleAllowTextSelection() {
 

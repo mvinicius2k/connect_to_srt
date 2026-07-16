@@ -4,9 +4,10 @@ import { invoke, InvokeArgs, InvokeOptions } from "@tauri-apps/api/core";
 /**
  * Representa um comando **invoke** do tauri, com um corpo de dados.
  */
-export type TauriCommand<TSucess = void, TError = void> = {
+export type TauriCommand<TData = any, TSucess = void, TError = void, > = {
+
   mock: (
-    data: any,
+    data: TData,
     args?: InvokeArgs,
     options?: InvokeOptions,
   ) => Promise<ResultAction<TSucess, TError>>;
@@ -15,12 +16,12 @@ export type TauriCommand<TSucess = void, TError = void> = {
 /**
  * Tipo para fazer a inferência de quando command tem ou não tem argumentos.
  */
-type InvokeParams<T extends TauriCommand<any, any>> = Parameters<
+type InvokeParams<T extends TauriCommand<any, any, any>> = Parameters<
   T["mock"]
->[0] extends void
+>[1] extends void
   ? [args?: InvokeArgs, options?: InvokeOptions]
   : [
-      data: Parameters<T["mock"]>[0],
+      data: Parameters<T["mock"]>[1],
       args?: InvokeArgs,
       options?: InvokeOptions,
     ];
@@ -58,7 +59,7 @@ type InvokeParams<T extends TauriCommand<any, any>> = Parameters<
  * @returns Um objeto que expõe a função `invoke` com tipagem inferida para cada comando.
  */
 export function defineCommands<
-  T extends Record<string, TauriCommand<any, any>>,
+  T extends Record<string, TauriCommand<any, any, any>>,
 >(definition: T) {
   return {
     /**
@@ -101,4 +102,7 @@ export function defineCommands<
   };
 }
 
-export type ErrorIdentifier = { code: string };
+export type ErrorIdentifier<TDetails = never> =
+  [TDetails] extends [never]
+    ? { code: string }
+    : { code: string; details: TDetails };
