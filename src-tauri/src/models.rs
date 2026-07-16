@@ -1,6 +1,12 @@
 use serde::{Deserialize, Serialize};
 use strum_macros::Display;
 
+#[derive(Serialize)]
+pub struct ErrorIdentifier<T = ()> {
+    pub error: String,
+    pub details: Option<T>,
+}
+
 #[derive(Display)]
 pub enum PlayCommandError {
     ExecutableNotConfigured,

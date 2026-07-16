@@ -1,28 +1,35 @@
 use crate::{
     actions::{self, get_machine_ipv4, scan, start_runner},
     models::{
-        PlayCommandError, SRTPoint, ScanCommandError, ScanRequestDTO, ScanResponseDTO,
-        SupportedMode,
+        ErrorIdentifier, PlayCommandError, SRTPoint, ScanCommandError, ScanRequestDTO,
+        ScanResponseDTO, SupportedMode,
     },
 };
 
 #[tauri::command]
-pub fn play_command(url: String) -> Result<(), String> {
+pub fn play_command(url: String) -> Result<(), ErrorIdentifier> {
     let res = start_runner("mpv", &url);
     match res {
         Ok(..) => return Ok(()),
-        Err(..) => return Err(PlayCommandError::ExecutableNotConfigured.to_string()),
+        Err(..) => {
+            return Err(ErrorIdentifier {
+                error: PlayCommandError::ExecutableNotConfigured.to_string(),
+                details: None,
+            })
+        }
     }
 }
 #[tauri::command]
-pub async fn scan_command(dto: ScanRequestDTO) -> Result<ScanResponseDTO, String> {
+pub async fn scan_command() -> Result<ScanResponseDTO, ErrorIdentifier> {
     let own_ip = get_machine_ipv4().map_err(|err| match err {
-        actions::NotSupportedIpError::LocalIpError(_) => {
-            ScanCommandError::CannotGetLocalIp.to_string()
-        }
-        actions::NotSupportedIpError::Ipv6IsNotSupported => {
-            ScanCommandError::IPv6NotSupported.to_string()
-        }
+        actions::NotSupportedIpError::LocalIpError(_) => ErrorIdentifier {
+            error: ScanCommandError::CannotGetLocalIp.to_string(),
+            details: None,
+        },
+        actions::NotSupportedIpError::Ipv6IsNotSupported => ErrorIdentifier {
+            error: ScanCommandError::IPv6NotSupported.to_string(),
+            details: None,
+        },
     })?;
 
     let port = 10000; //Substituir por função de obter a porta
