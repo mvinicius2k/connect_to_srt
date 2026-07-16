@@ -14,6 +14,11 @@ export type ResultAction<TSuccess = void, TError = void> =
   | ResultSuccess<TSuccess>
   | ResultError<TError>;
 
+const PASS_TOKEN = Symbol("Passing")
+export type CatchMapper<TError> =
+  (err: unknown, pass: () => typeof PASS_TOKEN) =>
+    TError | typeof PASS_TOKEN;
+
 export const Result = {
   /**
    * Cria um resultado de sucesso.
@@ -37,6 +42,7 @@ export const Result = {
       failed: true,
     };
   },
+
   /**
    * Faz uma ação de acordo com o resultado.
    * @param result O objeto resultado
@@ -91,4 +97,53 @@ export const Result = {
       return Result.success(transformers.onSucess(result.data));
     return Result.fail(transformers.onError(result.error));
   },
+  fromThrows<TSucess, TError>(action: () => TSucess, catchMap: ((err: unknown) => TError)
+    | CatchMapper<TError>[], catchFallback: (error: unknown) => TError): ResultAction<TSucess, TError>{
+    try {
+      const actionResult = action()
+      return Result.success(actionResult)
+    } catch (error: unknown) {
+      if (!Array.isArray(catchMap)) {
+        const errorResolved = catchMap(error)
+        return Result.fail(errorResolved)
+      }
+
+      const pass = (): typeof PASS_TOKEN => PASS_TOKEN
+
+      for (const mapper of catchMap) {
+        const res = mapper(error, pass)
+        if (res !== PASS_TOKEN)
+          return Result.fail(res)
+      }
+
+      return Result.fail(catchFallback(error))
+
+
+    }
+  },
+
+
+  async fromPromise<TSucess, TError>(action: () => Promise<TSucess>, catchMap: | ((err: unknown) => TError)
+    | CatchMapper<TError>[], catchFallback: (err: unknown) => TError): Promise<ResultAction<TSucess, TError>>{
+    try {
+      const actionResult = action()
+      return Result.success(await actionResult)
+    } catch (error: unknown) {
+      if (!Array.isArray(catchMap)) {
+        const errorResolved = catchMap(error)
+        return Result.fail(errorResolved)
+      }
+
+      const pass = (): typeof PASS_TOKEN => PASS_TOKEN
+
+      for (const mapper of catchMap) {
+        const res = mapper(error, pass)
+        if (res !== PASS_TOKEN)
+          return Result.fail(res)
+      }
+
+      return Result.fail(catchFallback(error))
+    }
+  },
+
 };
