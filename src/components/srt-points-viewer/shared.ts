@@ -3,7 +3,7 @@ import { HTMLAttributes } from "react";
 export type SRTPoint = {
   host: string;
   port: number;
-  kind: "listener" | "rez";
+  kind: "listener" | "rendezvous";
 };
 
 

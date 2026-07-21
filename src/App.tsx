@@ -18,7 +18,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col w-dvw h-dvh bg-linear-150 bg-fixed from-indigo-950 to-neutral-950 bg-indigo-100 dark:text-neutral-100 text-neutral-900">
+    <div className="flex flex-col w-dvw h-dvh bg-linear-150 bg-fixed to-indigo-200 from-neutral-200 dark:from-indigo-950 dark:to-neutral-950 bg-indigo-100 dark:text-neutral-100 text-neutral-900">
       <header className="mt-4 flex flex-row-reverse items-center gap-2.5 pr-4 absolute w-full">
         <Button
           data-tooltip-id="settings"

@@ -3,41 +3,54 @@ import searchIcon from "@/assets/search.svg?url";
 import SRTPointsToolbar from "@/components/srt-points-toolbar/SRTPointsToolbar";
 import { SRTPoint } from "@/components/srt-points-viewer/shared";
 import SRTPointsViewer from "@/components/srt-points-viewer/SRTPointsViewer";
-import { useToolbarImpl as useToolbar } from "@/hooks/use-toolbar";
+import BouncingLoading from "@/components/ui/loading/BouncingLoading";
+import { useAsyncResult } from "@/hooks/use-async-result";
+import { useToolbar as useToolbar } from "@/hooks/use-toolbar";
+import clsx from "clsx";
 import { useState } from "react";
 import { ReactSVG } from "react-svg";
 
 function Index() {
   const [allPoints, setAllPoints] = useState<SRTPoint[]>([]);
-  const [firstScan, setFirstScan] = useState(true);
   const [selectedPoint, setSelectedPoint] = useState<SRTPoint>();
-
+  const scanCommand = useAsyncResult(ActionsAPI.scan);
   const toolbar = useToolbar();
 
   async function scan() {
-    const result = await ActionsAPI.invoke("scan_command");
+    const result = await scanCommand.execute();
+
     if (result.failed) {
       console.error("Falhou");
       return;
     }
-    setFirstScan(false);
-    setAllPoints(result.data);
+
+    setAllPoints(result.data.points);
   }
 
   function onSelectedPoint(point: SRTPoint | undefined) {
     setSelectedPoint(point);
   }
 
+  const buttonClasses = clsx(
+    "size-64 relative group rounded-full bg-linear-to-r from-indigo-600 to-indigo-800 text-cyan-200 text-4xl font-black outline-2 outline-offset-4 flex flex-col justify-center items-center hover:scale-110 duration-200 active:scale-95 active:brightness-150 outline-cyan-500 cursor-pointer select-none",
+    {},
+  );
+  const bouncingLoadingClasses = clsx("", {
+    hidden: scanCommand.state !== "busy",
+  });
+  const iconSearchClasses = clsx("[&_svg]:size-12 mt-4", {
+    hidden: scanCommand.state === "busy",
+  });
+
   return (
     <div className="w-full flex items-center justify-center h-full">
-      {firstScan ? (
-        <button
-          onClick={scan}
-          className="size-64 rounded-full bg-linear-to-r from-indigo-600 to-indigo-800 text-cyan-200 text-4xl font-black outline-2 outline-offset-4 flex flex-col justify-center items-center hover:scale-110 duration-200 active:scale-95 active:brightness-150 outline-cyan-500 cursor-pointer select-none"
-        >
-          ESCANEAR
+      {scanCommand.state !== "done" ? (
+        <button onClick={scan} className={buttonClasses}>
+          {scanCommand.state !== "busy" ? "ESCANEAR" : "BUSCANDO"}
           <div className="h-0">
-            <ReactSVG className="[&_svg]:size-12 mt-4" src={searchIcon} />
+            <BouncingLoading className={bouncingLoadingClasses} />
+
+            <ReactSVG className={iconSearchClasses} src={searchIcon} />
           </div>
         </button>
       ) : (
@@ -48,7 +61,6 @@ function Index() {
           />
           <SRTPointsViewer
             onSelectedPoint={onSelectedPoint}
-
             points={allPoints}
           />
         </div>
