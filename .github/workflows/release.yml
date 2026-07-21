@@ -21,6 +21,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure tag is on master
+        run: |
+          git fetch origin master
+
+          if ! git branch -r --contains "$GITHUB_SHA" | grep -q "origin/master"; then
+            echo "Tag is not on master"
+            exit 1
+          fi
+
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
