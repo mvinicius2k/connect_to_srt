@@ -8,16 +8,16 @@ function Button(
   },
 ) {
   const classes = clsx(
-    "not-disabled:cursor-pointer not-disabled:active:scale-90 duration-100 disabled:opacity-50 disabled:saturate-50 inline-flex items-center justify-center aria-busy:animate-pulse",
+    "not-disabled:cursor-pointer not-disabled:active:scale-90 duration-100 inline-flex items-center justify-center aria-busy:animate-pulse",
 
     {
       "h-10 px-4 min-w-28": !sticky,
       "size-8 p-1 rounded-full": sticky,
-      "bg-indigo-700 text-neutral-100 aria-selected:saturate-200 aria-busy:saturate-50":
+      "bg-indigo-700 text-neutral-100 aria-selected:saturate-200 disabled:bg-indigo-400 aria-busy:saturate-50":
         variant === "primary",
-      "dark:bg-neutral-100 dark:text-neutral-800 bg-neutral-900 text-neutral-100 aria-selected:bg-indigo-400 aria-busy:dark:bg-indigo-950 aria-busy:bg-indigo-400":
+      "dark:bg-neutral-100 dark:text-neutral-800 bg-neutral-900 disabled:bg-neutral-500 text-neutral-100 aria-selected:bg-indigo-400 aria-busy:dark:bg-indigo-950 aria-busy:bg-indigo-400":
         variant === "secondary",
-      "rounded-3xl dark:not-disabled:hover:bg-indigo-800/40 not-disabled:dark:hover:text-indigo-300 dark:text-indigo-400 not-disabled:hover:bg-indigo-200/40 not-disabled:hover:text-indigo-800 text-indigo-700 aria-selected:bg-indigo-600/50 aria-selected:dark:text-white aria-selected:text-black":
+      "rounded-3xl dark:not-disabled:hover:bg-indigo-800/40 disabled:saturate-50 dark:disabled:brightness-50 disabled:brightness-150 not-disabled:dark:hover:text-indigo-300 dark:text-indigo-400 not-disabled:hover:bg-indigo-200/40 not-disabled:hover:text-indigo-800 text-indigo-700 aria-selected:bg-indigo-600/50 aria-selected:dark:text-white aria-selected:text-black":
         variant === "transparent",
 
     },
@@ -40,6 +40,8 @@ function Button(
       className={classes}
       onClick={callOnClick}
       aria-busy={loading}
+      disabled={loading}
+
     >
       {children}
     </button>

@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 
 
-function SRTPointsViewer({points, allowTextSelect, onSelectedPoint, ...props}: SRTPointsViewerProps) {
+function SRTPointsViewer({points, allowTextSelect, onSelectedPoint, onPlaySelected, ...props}: SRTPointsViewerProps) {
   const [selected, setSelect] = useState<number>();
 
   function select(index: number) {
@@ -31,6 +31,7 @@ function SRTPointsViewer({points, allowTextSelect, onSelectedPoint, ...props}: S
               key={`${p.host}:${p.port}`}
               aria-selected={selected === index}
               onClick={() => select(index)}
+              onDoubleClick={() => onPlaySelected?.(points[index])}
               className="hover:[&>td]:bg-white/10 active:[&>td]:bg-white/20 aria-selected:[&>td]:bg-white/30"
             >
               <td>{p.host}</td>

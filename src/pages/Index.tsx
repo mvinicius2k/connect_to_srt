@@ -4,6 +4,7 @@ import SRTPointsToolbar from "@/components/srt-points-toolbar/SRTPointsToolbar";
 import { SRTPoint } from "@/components/srt-points-viewer/shared";
 import SRTPointsViewer from "@/components/srt-points-viewer/SRTPointsViewer";
 import BouncingLoading from "@/components/ui/loading/BouncingLoading";
+import { generateSRTUrl } from "@/helpers/srt-url-generator";
 import { useAsyncResult } from "@/hooks/use-async-result";
 import { useToolbar as useToolbar } from "@/hooks/use-toolbar";
 import clsx from "clsx";
@@ -14,6 +15,7 @@ function Index() {
   const [allPoints, setAllPoints] = useState<SRTPoint[]>([]);
   const [selectedPoint, setSelectedPoint] = useState<SRTPoint>();
   const scanCommand = useAsyncResult(ActionsAPI.scan);
+  const playCommand = useAsyncResult(ActionsAPI.play)
   const toolbar = useToolbar();
 
   async function scan() {
@@ -29,6 +31,10 @@ function Index() {
 
   function onSelectedPoint(point: SRTPoint | undefined) {
     setSelectedPoint(point);
+  }
+  function onPlayPoint(point: SRTPoint) {
+    const url = generateSRTUrl(point)
+    playCommand.execute({url})
   }
 
   const buttonClasses = clsx(
@@ -61,6 +67,7 @@ function Index() {
           />
           <SRTPointsViewer
             onSelectedPoint={onSelectedPoint}
+            onPlaySelected={onPlayPoint}
             points={allPoints}
           />
         </div>

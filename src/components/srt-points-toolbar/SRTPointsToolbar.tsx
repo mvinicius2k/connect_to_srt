@@ -6,9 +6,20 @@ import playIcon from "@/assets/play.svg?url";
 import textSelectionIcon from "@/assets/text-selection.svg?url";
 import { ReactSVG } from "react-svg";
 import clsx from "clsx";
+import { useAsyncResult } from "@/hooks/use-async-result";
+import { ActionsAPI } from "@/api/actions-api";
 
-function SRTPointsToolbar({ actions, selectedPoint }: SRTPointsToolbarProps) {
+function SRTPointsToolbar({ actions, selectedPoint, onScanFinished, onScanStarted }: SRTPointsToolbarProps) {
   const [allowTextSelection, setAllowTextSelection] = useState(false);
+  const [scanning, setScanning] = useState(false)
+  const scanCommand = useAsyncResult(ActionsAPI.scan)
+  async function scan() {
+    setScanning(true)
+    onScanStarted?.()
+    const res = await scanCommand.execute()
+    onScanFinished?.(res);
+    setScanning(false)
+  }
 
   return (
     <nav className="flex justify-between gap-2 w-full [&_button]:size-14">
@@ -21,7 +32,7 @@ function SRTPointsToolbar({ actions, selectedPoint }: SRTPointsToolbarProps) {
         >
           <ReactSVG src={playIcon} />
         </Button>
-        <Button variant="transparent" sticky onClick={() => actions.scanAgain()}>
+        <Button variant="transparent" sticky onClick={() => scan()} loading={scanning}>
           <ReactSVG src={reloadIcon} />
         </Button>
       </div>
