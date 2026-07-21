@@ -9,11 +9,9 @@ use srt_tokio::{
     options::{SocketAddress, SocketHost},
     SrtSocket,
 };
+use std::process::{Child, Command};
 use strum_macros::Display;
-use tokio::{
-    process::{Child, Command},
-    time::timeout,
-};
+use tokio::time::timeout;
 
 #[derive(Display)]
 pub enum NotSupportedIpError {
