@@ -11,6 +11,7 @@ use srt_tokio::{
 };
 use std::process::{Child, Command};
 use strum_macros::Display;
+use tauri_plugin_log::log;
 use tokio::time::timeout;
 
 #[derive(Display)]
@@ -36,10 +37,10 @@ pub async fn scan(own_ip: Ipv4Addr) -> Vec<Ipv4Addr> {
         let ip = Ipv4Addr::new(a, b, c, d);
         let host = SocketHost::Ipv4(ip);
         let socket_adress = SocketAddress { host, port };
-        println!("Tentando endereço {0}:{1}", ip.to_string(), port);
+        log::info!("Tentando endereço {0}:{1}", ip.to_string(), port);
         if is_adress_srt_ready(socket_adress, 500).await {
             avaliable_listeners.push(ip);
-            println!("Endereço adicionado");
+            log::info!("Endereço adicionado");
             break;
         }
     }

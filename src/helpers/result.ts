@@ -129,6 +129,7 @@ export const Result = {
       const actionResult = action()
       return Result.success(await actionResult)
     } catch (error: unknown) {
+      console.error(error)
       if (!Array.isArray(catchMap)) {
         const errorResolved = catchMap(error)
         return Result.fail(errorResolved)

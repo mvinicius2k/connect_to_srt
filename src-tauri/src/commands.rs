@@ -8,7 +8,6 @@ use crate::{
 
 #[tauri::command]
 pub fn play_command(dto: PlayRequestDTO) -> Result<(), ErrorIdentifier> {
-    println!("Play");
     let res = start_runner("mpv", &dto.url);
     match res {
         Ok(..) => return Ok(()),

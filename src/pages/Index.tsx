@@ -7,6 +7,7 @@ import BouncingLoading from "@/components/ui/loading/BouncingLoading";
 import { generateSRTUrl } from "@/helpers/srt-url-generator";
 import { useAsyncResult } from "@/hooks/use-async-result";
 import { useToolbar as useToolbar } from "@/hooks/use-toolbar";
+import { error } from "@tauri-apps/plugin-log";
 import clsx from "clsx";
 import { useState } from "react";
 import { ReactSVG } from "react-svg";
@@ -33,13 +34,15 @@ function Index() {
   function onSelectedPoint(point: SRTPoint | undefined) {
     setSelectedPoint(point);
   }
-  function onPlayPoint(point: SRTPoint) {
+  async function onPlayPoint(point: SRTPoint) {
     const url = generateSRTUrl({
       ip: point.ip,
       mode: point.mode === 'listener' ? 'caller' : 'rendezvous',
       port: point.port
     })
-    playCommand.execute({url})
+    const result = await playCommand.execute({ url })
+    if (result.failed)
+      error(result.error.code)
   }
 
   const buttonClasses = clsx(

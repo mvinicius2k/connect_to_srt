@@ -15,7 +15,6 @@ function SRTPointsViewer({points, allowTextSelect, onSelectedPoint, onPlaySelect
   const tableClasses = clsx('w-full [&_th]:h-16 [&_th]:text-start [&_th]:last:text-end [&_th]:border-b [&_td]:last:text-end [&_td]:h-10', {'select-none' : !allowTextSelect})
   return (
     <div {...props} className={clsx("relative w-full", props.className)}>
-      { JSON.stringify(points) }
       <table className={tableClasses}>
         <thead>
           <tr>
