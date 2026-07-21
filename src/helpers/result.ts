@@ -89,12 +89,12 @@ export const Result = {
   transform<TSucessInput, TSucessOutput, TErrorInput, TErrorOutput>(
     result: ResultAction<TSucessInput, TErrorInput>,
     transformers: {
-      onSucess: (sucess: TSucessInput) => TSucessOutput;
+      onSuccess: (sucess: TSucessInput) => TSucessOutput;
       onError: (error: TErrorInput) => TErrorOutput;
     },
   ): ResultAction<TSucessOutput, TErrorOutput> {
     if (result.sucess)
-      return Result.success(transformers.onSucess(result.data));
+      return Result.success(transformers.onSuccess(result.data));
     return Result.fail(transformers.onError(result.error));
   },
   fromThrows<TSucess, TError>(action: () => TSucess, catchMap: ((err: unknown) => TError)

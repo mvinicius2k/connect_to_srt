@@ -6,5 +6,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   shape?: "default" | "circular";
   children?: ReactNode;
   size?: "medium" | "small";
-  selected?: boolean
+  selected?: boolean,
+  loading?: boolean
+
 }
