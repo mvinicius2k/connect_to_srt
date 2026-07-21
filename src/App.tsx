@@ -1,21 +1,13 @@
-import { useState } from "react";
 
-import { invoke } from "@tauri-apps/api/core";
 import "@/App.css";
 import settingsIcon from "@/assets/settings.svg?url";
-import { Outlet } from "react-router";
 import Button from "@/components/ui/button/Button";
-import { ReactSVG } from "react-svg";
 import Tooltip from "@/components/ui/tooltip/Tooltip";
+import { Outlet } from "react-router";
+import { ReactSVG } from "react-svg";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
 
   return (
     <div className="flex flex-col w-dvw h-dvh bg-linear-150 bg-fixed to-indigo-200 from-neutral-200 dark:from-indigo-950 dark:to-neutral-950 bg-indigo-100 dark:text-neutral-100 text-neutral-900">
