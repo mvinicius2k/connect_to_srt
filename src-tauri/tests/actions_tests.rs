@@ -42,7 +42,7 @@ mod tests {
         );
         if let Ok(mut child_process) = result {
             let terminate = child_process.kill();
-            assert!(terminate.await.is_ok())
+            assert!(terminate.is_ok())
         }
     }
 }
