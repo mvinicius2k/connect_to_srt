@@ -12,7 +12,10 @@ pub enum PlayCommandError {
     ExecutableNotConfigured,
     Unsuported,
 }
-
+#[derive(Deserialize)]
+pub struct PlayRequestDTO {
+    pub url: String,
+}
 #[derive(Display)]
 pub enum SupportedMode {
     Listener,

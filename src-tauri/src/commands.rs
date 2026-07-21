@@ -1,14 +1,14 @@
 use crate::{
     actions::{self, get_machine_ipv4, scan, start_runner},
     models::{
-        ErrorIdentifier, PlayCommandError, SRTPoint, ScanCommandError, ScanRequestDTO,
+        ErrorIdentifier, PlayCommandError, PlayRequestDTO, SRTPoint, ScanCommandError,
         ScanResponseDTO, SupportedMode,
     },
 };
 
 #[tauri::command]
-pub fn play_command(url: String) -> Result<(), ErrorIdentifier> {
-    let res = start_runner("mpv", &url);
+pub fn play_command(dto: PlayRequestDTO) -> Result<(), ErrorIdentifier> {
+    let res = start_runner("mpv", &dto.url);
     match res {
         Ok(..) => return Ok(()),
         Err(..) => {
