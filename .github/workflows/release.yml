@@ -25,6 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Ensure tag is on master
+        shell: "bash"
         run: |
           git fetch origin master
 
@@ -33,20 +34,19 @@ jobs:
             exit 1
           fi
 
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Install frontend dependencies
         run: pnpm install
