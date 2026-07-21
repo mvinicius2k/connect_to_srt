@@ -15,6 +15,7 @@ function SRTPointsViewer({points, allowTextSelect, onSelectedPoint, onPlaySelect
   const tableClasses = clsx('w-full [&_th]:h-16 [&_th]:text-start [&_th]:last:text-end [&_th]:border-b [&_td]:last:text-end [&_td]:h-10', {'select-none' : !allowTextSelect})
   return (
     <div {...props} className={clsx("relative w-full", props.className)}>
+      { JSON.stringify(points) }
       <table className={tableClasses}>
         <thead>
           <tr>
@@ -28,15 +29,15 @@ function SRTPointsViewer({points, allowTextSelect, onSelectedPoint, onPlaySelect
         <tbody>
           {points.map((p, index) => (
             <tr
-              key={`${p.host}:${p.port}`}
+              key={`${p.ip}:${p.port}`}
               aria-selected={selected === index}
               onClick={() => select(index)}
               onDoubleClick={() => onPlaySelected?.(points[index])}
               className="hover:[&>td]:bg-white/10 active:[&>td]:bg-white/20 aria-selected:[&>td]:bg-white/30"
             >
-              <td>{p.host}</td>
+              <td>{p.ip}</td>
               <td>{p.port}</td>
-              <td>{p.kind}</td>
+              <td>{p.mode}</td>
               <td>100ms</td>
             </tr>
           ))}

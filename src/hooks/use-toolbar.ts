@@ -22,7 +22,11 @@ export function useToolbar() {
   const scanCommandStatus = useAsyncResult(ActionsAPI.scan)
   const impl: ToolbarActions = {
     play(srtPoint) {
-      const url = generateSRTUrl(srtPoint)
+      const url = generateSRTUrl({
+        ip: srtPoint.ip,
+        mode: srtPoint.mode === 'listener' ? 'caller' : 'rendezvous',
+        port: srtPoint.port
+      })
       return playCommandStatus.execute({ url: url })
     },
     async scanAgain() {

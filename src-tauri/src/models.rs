@@ -18,7 +18,9 @@ pub struct PlayRequestDTO {
 }
 #[derive(Display)]
 pub enum SupportedMode {
+    #[strum(to_string = "listener")]
     Listener,
+    #[strum(to_string = "rendezvous")]
     Rendezvous,
 }
 #[derive(Serialize)]

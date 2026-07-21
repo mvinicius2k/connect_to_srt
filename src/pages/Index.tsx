@@ -19,6 +19,7 @@ function Index() {
   const toolbar = useToolbar();
 
   async function scan() {
+    console.log("result.data.points")
     const result = await scanCommand.execute();
 
     if (result.failed) {
@@ -33,7 +34,11 @@ function Index() {
     setSelectedPoint(point);
   }
   function onPlayPoint(point: SRTPoint) {
-    const url = generateSRTUrl(point)
+    const url = generateSRTUrl({
+      ip: point.ip,
+      mode: point.mode === 'listener' ? 'caller' : 'rendezvous',
+      port: point.port
+    })
     playCommand.execute({url})
   }
 

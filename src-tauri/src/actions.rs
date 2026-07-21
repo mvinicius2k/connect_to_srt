@@ -34,14 +34,15 @@ pub async fn scan(own_ip: Ipv4Addr) -> Vec<Ipv4Addr> {
     let [a, b, c, _] = own_ip.octets();
     let port = 10000;
     let mut avaliable_listeners: Vec<Ipv4Addr> = Vec::new();
-    for d in 2..=253 {
+    for d in 2..=254 {
         let ip = Ipv4Addr::new(a, b, c, d);
         let host = SocketHost::Ipv4(ip);
         let socket_adress = SocketAddress { host, port };
         println!("Tentando endereço {0}:{1}", ip.to_string(), port);
         if is_adress_srt_ready(socket_adress, 500).await {
             avaliable_listeners.push(ip);
-            println!("Endereço adicionado")
+            println!("Endereço adicionado");
+            break;
         }
     }
 
@@ -59,5 +60,6 @@ pub fn start_mpv(ip: Ipv4Addr, port: u16) -> Result<Child, Error> {
 }
 
 pub fn start_runner(runner: &str, url: &str) -> Result<Child, Error> {
+    println!("Iniciando {0} {1}", runner, url);
     Command::new(runner).arg(url).spawn()
 }

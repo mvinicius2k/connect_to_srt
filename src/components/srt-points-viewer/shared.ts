@@ -1,9 +1,9 @@
 import { HTMLAttributes } from "react";
 
 export type SRTPoint = {
-  host: string;
+  ip: string;
   port: number;
-  kind: "listener" | "rendezvous";
+  mode: "listener" | "rendezvous";
 };
 
 

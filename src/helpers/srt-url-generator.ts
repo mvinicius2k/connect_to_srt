@@ -1,7 +1,10 @@
-import { SRTPoint } from "@/components/srt-points-viewer/shared";
-import { entries, join, map, pipe } from "remeda";
 
-export type SRTUrlGenerator = SRTPoint & {
+import { entries, filter, isEmptyish, join, map, pipe } from "remeda";
+
+export type SRTUrlGenerator = {
+  ip: string,
+  port: number,
+  mode: 'caller' | "rendezvous"
   latency?: number,
   streamid?: string,
   passphrase?: string,
@@ -9,16 +12,16 @@ export type SRTUrlGenerator = SRTPoint & {
   others?: Record<string, string>
 }
 
-export function generateSRTUrl({host, kind, port, bandwidth, latency, passphrase, streamid, others}: SRTUrlGenerator) {
+export function generateSRTUrl({ip, mode, port, bandwidth, latency, passphrase, streamid, others}: SRTUrlGenerator) {
   const paramsStr = paramsOrNothing({
-    mode: kind,
+    mode: mode,
     bandwidth: bandwidth,
     latency: latency,
     passphrase: passphrase,
     streamid: streamid,
     ...others
   })
-  return `srt://${host}:${port}?${paramsStr}`
+  return `srt://${ip}:${port}?${paramsStr}`
 }
 
 export function paramOrNothing(paramName: string | undefined, paramValue: string | number | undefined) {
@@ -28,5 +31,5 @@ export function paramOrNothing(paramName: string | undefined, paramValue: string
 }
 
 export function paramsOrNothing(params: Record<string, string | number | undefined>): string {
-  return pipe(entries(params), map(([paramName, paramValue]) => paramOrNothing(paramName, paramValue)), join("&"))
+  return pipe(entries(params), map(([paramName, paramValue]) => paramOrNothing(paramName, paramValue)), filter(p => !isEmptyish(p)), join("&"))
 }

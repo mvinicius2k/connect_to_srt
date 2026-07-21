@@ -20,25 +20,27 @@ export const ActionsAPI = {
   async scan(): Promise<
     ResultAction<ScanSucessResponseDto, ScanFailResponseDto>
   > {
-    if (import.meta.env.VITE_MOCK) {
+    if (import.meta.env.VITE_MOCK === "true") {
       const { faker } = await import("@faker-js/faker");
-      await sleep(1000)
+      await sleep(2000)
       const points = times(
         faker.number.int({ min: 0, max: 15 }),
         (): SRTPoint => ({
-          host: faker.internet.ipv4(),
+          ip: faker.internet.ipv4(),
           port: faker.number.int({ min: 1000, max: 60_000 }),
-          kind: faker.helpers.arrayElement(["listener", "rendezvous"]),
+          mode: faker.helpers.arrayElement(["listener", "rendezvous"]),
         }),
       );
       return Result.success({points});
     }
-    return invoke<ResultAction<ScanSucessResponseDto,ScanFailResponseDto>>("scan_command");
+    return Result.fromPromise<ScanSucessResponseDto, ScanFailResponseDto>(() => invoke("scan_command"), [], (err) => err as ScanFailResponseDto)
   },
   async play(dto: PlayRequestDto): Promise<ResultAction<undefined, PlayFailResponseDto>> {
-    if (import.meta.env.VITE_MOCK)
+    if (import.meta.env.VITE_MOCK === "true") {
+      alert("Play: " + JSON.stringify(dto))
       return Result.success(undefined)
-    return invoke<ResultAction<undefined, PlayFailResponseDto>>('play_command', dto)
-
+    }
+    console.log("Chamando 'play_command'")
+    return Result.fromPromise<undefined, PlayFailResponseDto>(() => invoke("play_command", { dto }), [], (err) => err as PlayFailResponseDto)
   }
 };
